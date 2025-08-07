@@ -89,7 +89,7 @@ public class Ride implements RideInterface
     @Override
     public void printQueue() 
     {
-        System.out.println("waiting line for " + ride_name + ":");
+        System.out.println("\nwaiting line for " + ride_name + ":");
 
         if (waiting_line.isEmpty()) 
         {
@@ -107,7 +107,7 @@ public class Ride implements RideInterface
     @Override
     public void runOneCycle()
     {
-        System.out.println("attempting to run one cycle for " + ride_name + "...");
+        System.out.println("\nattempting to run one cycle for " + ride_name + "...");
 
         if (operator == null) {
             System.out.println("no ride operator is assigned");
@@ -123,13 +123,12 @@ public class Ride implements RideInterface
         while (!waiting_line.isEmpty() && count < max_rider) 
         {
             Visitor visitor = waiting_line.poll();
-            System.out.println("  > " + visitor.get_first_name() + " is taking the ride");
+            System.out.println("- " + visitor.get_first_name() + " is taking the ride");
             addVisitorToHistory(visitor);
             count++;
         }
 
         num_of_cycles++;
-        System.out.println("ride cycle completed successfully. total cycles run: " + num_of_cycles);
     }
 
     @Override
