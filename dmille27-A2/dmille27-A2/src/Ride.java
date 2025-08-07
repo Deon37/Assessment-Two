@@ -1,7 +1,8 @@
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.Queue;
 
-public class Ride implements RideInterface 
+public class Ride implements RideInterface
 {
     private String ride_name;
     private int minimum_height;
@@ -81,20 +82,20 @@ public class Ride implements RideInterface
         } 
         else 
         {
-            System.out.println("The queue is empty");
+            System.out.println("the queue is empty");
         }
     }
 
     @Override
     public void printQueue() 
     {
-        System.out.println("Waiting line for " + ride_name + ":");
+        System.out.println("waiting line for " + ride_name + ":");
 
         if (waiting_line.isEmpty()) 
         {
-            System.out.println("No visitors in the queue");
+            System.out.println("no visitors in the queue");
         } 
-        else 
+        else
         {
             for (Visitor visitor : waiting_line)
             {
@@ -106,15 +107,15 @@ public class Ride implements RideInterface
     @Override
     public void runOneCycle()
     {
-        System.out.println("Attempting to run one cycle for " + ride_name + "...");
+        System.out.println("attempting to run one cycle for " + ride_name + "...");
 
         if (operator == null) {
-            System.out.println("No ride operator is assigned");
+            System.out.println("no ride operator is assigned");
             return;
         }
 
         if (waiting_line.isEmpty()) {
-            System.out.println("No visitors in the queue");
+            System.out.println("no visitors in the queue");
             return;
         }
 
@@ -128,7 +129,7 @@ public class Ride implements RideInterface
         }
 
         num_of_cycles++;
-        System.out.println("Ride cycle completed successfully. Total cycles run: " + num_of_cycles);
+        System.out.println("ride cycle completed successfully. total cycles run: " + num_of_cycles);
     }
 
     @Override
@@ -149,18 +150,34 @@ public class Ride implements RideInterface
     @Override
     public void printRideHistory() 
     {
-        System.out.println("Ride history for " + ride_name + ":");
+        System.out.println("ride history for " + ride_name + ":");
 
         if (ride_history.isEmpty())
         {
-            System.out.println("No visitors have taken the ride");
+            System.out.println("no visitors have taken the ride");
         } 
-        else 
+        else
         {
-            for (Visitor visitor : ride_history)
+            // we have to use iterator instead of for-loop :(
+            java.util.Iterator<Visitor> iterator = ride_history.iterator();
+            while (iterator.hasNext())
             {
+                Visitor visitor = iterator.next();
                 System.out.println("- " + visitor.get_first_name());
             }
+        }
+    }
+
+    public void sortRideHistory() 
+    {
+        if (ride_history.isEmpty()) 
+        {
+            System.out.println("no visitors in ride history to sort");
+        }
+        else
+        {
+            Collections.sort(ride_history, new VisitorComparator());
+            System.out.println("ride history has been sorted by membership type and first name");
         }
     }
 }
