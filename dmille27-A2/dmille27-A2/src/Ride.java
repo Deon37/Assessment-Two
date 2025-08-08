@@ -1,3 +1,8 @@
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.Queue;
@@ -177,6 +182,83 @@ public class Ride implements RideInterface
         {
             Collections.sort(ride_history, new VisitorComparator());
             System.out.println("ride history has been sorted by membership type and first name");
+        }
+    }
+
+    public void exportRideHistory()
+    {
+        if (ride_history.isEmpty())
+        {
+            System.out.println("no visitors in ride history to export");
+        }
+        else
+        {
+            try 
+            {
+                BufferedWriter writer = new BufferedWriter(new FileWriter("ride_history.csv"));
+
+                for (int i = 0; i < ride_history.size(); i++)
+                {
+                    Visitor visitor = ride_history.get(i);
+
+                    String csv_line = 
+                    visitor.get_first_name() + "," + 
+                    visitor.get_last_name() + "," + 
+                    visitor.get_age() + "," + 
+                    visitor.get_membership_type() + "," + 
+                    visitor.get_has_fast_pass();
+                    
+                    writer.write(csv_line);
+                    writer.newLine();
+                }
+
+                writer.close();
+                System.out.println("ride history exported to ride_history.csv");
+            } 
+            catch (IOException e) 
+            {
+                // lets just print any errors just in case
+                System.out.println("error exporting ride history: " + e.getMessage());
+            }
+        }
+    }
+
+    public void importRideHistory()
+    {
+        try
+        {
+            BufferedReader reader = new BufferedReader(new FileReader("ride_history.csv"));
+            String line;
+
+            // loops until no more lines
+            while ((line = reader.readLine()) != null)
+            {
+                String[] parts = line.split(",");
+
+                if (parts.length == 5)
+                {
+                    String first = parts[0].trim();
+                    String last = parts[1].trim();
+                    int age = Integer.parseInt(parts[2].trim());
+                    String membership = parts[3].trim();
+                    boolean fast_pass = Boolean.parseBoolean(parts[4].trim());
+
+                    Visitor visitor = new Visitor(first, last, age, membership, fast_pass);
+                    ride_history.add(visitor);
+                }
+                else
+                {
+                    System.out.println("ride history contains missing data");
+                }
+            }
+
+            reader.close();
+            System.out.println("ride history imported from ride_history.csv");
+        } 
+        catch (IOException e)
+        {
+            // lets just print any errors just in case
+            System.out.println("error importing ride history: " + e.getMessage());
         }
     }
 }
